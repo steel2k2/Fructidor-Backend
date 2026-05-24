@@ -1,0 +1,15 @@
+# Entorno virtual
+venv/
+.venv/
+ENV/
+
+# Archivos temporales de Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Base de datos local de desarrollo (si usas sqlite de prueba)
+*.sqlite3
+
+# Archivos de entorno ocultos (donde irán tus contraseñas futuras)
+.env
