@@ -21,6 +21,7 @@ class Person(models.Model):
     dni = models.CharField(max_length=20, unique=True)
     nombres = models.CharField(max_length=150)
     apellidos = models.CharField(max_length=150)
+    fecha_nacimiento = models.DateField(null=True, blank=True)
 
     class Meta:
         verbose_name = "Persona"

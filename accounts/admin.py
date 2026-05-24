@@ -8,5 +8,5 @@ admin.site.register(Role)
 
 @admin.register(Person)
 class PersonAdmin(admin.ModelAdmin):
-    list_display = ('user', 'dni', 'nombres', 'apellidos', 'role')
+    list_display = ('user', 'dni', 'nombres', 'apellidos', 'fecha_nacimiento', 'role')
     search_fields = ('user__username', 'dni', 'nombres', 'apellidos')

@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.password_validation import validate_password
+from django.db import transaction
 from rest_framework import serializers
 
 from .models import Person, Role
@@ -20,7 +21,7 @@ class PersonSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Person
-        fields = ('id', 'dni', 'nombres', 'apellidos', 'user', 'user_id', 'role')
+        fields = ('id', 'dni', 'nombres', 'apellidos', 'fecha_nacimiento', 'user', 'user_id', 'role')
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -42,18 +43,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         return data
 
     def create(self, validated_data):
-        validated_data.pop('password2', None)
-        role = validated_data.pop('role', None)
-        person_data = validated_data.pop('person', None)
-        password = validated_data.pop('password')
-        user = User(**validated_data)
-        user.set_password(password)
-        user.save()
+        with transaction.atomic():
+            validated_data.pop('password2', None)
+            role = validated_data.pop('role', None)
+            person_data = validated_data.pop('person', None)
+            password = validated_data.pop('password')
+            
+            user = User(**validated_data)
+            user.set_password(password)
+            user.save()
 
-        if person_data:
-            Person.objects.create(user=user, role=role, **person_data)
+            if person_data:
+                Person.objects.create(user=user, role=role, **person_data)
 
-        return user
+            return user
 
 
 class ChangePasswordSerializer(serializers.Serializer):
