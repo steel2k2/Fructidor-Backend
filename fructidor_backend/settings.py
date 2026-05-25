@@ -1,3 +1,4 @@
+import os
 """
 Django settings for fructidor_backend project.
 
