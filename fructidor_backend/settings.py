@@ -91,13 +91,23 @@ WSGI_APPLICATION = 'fructidor_backend.wsgi.application'
 #}
 
 # Reemplaza tu bloque DATABASES actual por este:
+
+
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
 DATABASES = {
     'default': dj_database_url.config(
-        default=os.environ.get('DATABASE_URL'),
+        default=DATABASE_URL if DATABASE_URL else 'postgresql://achana:Fructidor2k26---@127.0.0.1:5432/fructidor_db',
         conn_max_age=600,
-        ssl_require=True
+        # Si NO hay DATABASE_URL (estás en local usando el default), apaga SSL. Si hay URL (Neon), exige SSL.
+        ssl_require=True if DATABASE_URL else False
     )
 }
+
+
+
+
 
 
 
