@@ -1,4 +1,5 @@
 import os
+import dj_database_url
 """
 Django settings for fructidor_backend project.
 
@@ -78,16 +79,27 @@ WSGI_APPLICATION = 'fructidor_backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': 'django.db.backends.postgresql',
+#        'NAME': 'fructidor_db',
+#        'USER': 'achana',
+#        'PASSWORD': 'Fructidor2k26---',
+#        'HOST': '127.0.0.1',
+#        'PORT': '5432',
+#    }
+#}
+
+# Reemplaza tu bloque DATABASES actual por este:
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'fructidor_db',
-        'USER': 'achana',
-        'PASSWORD': 'Fructidor2k26---',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default=os.environ.get('DATABASE_URL'),
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
+
+
 
 
 # Password validation
