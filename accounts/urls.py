@@ -8,8 +8,8 @@ from .views import (
     PersonDetailView,
     PersonListCreateView,
     RegisterView,
-    RoleDetailView,
-    RoleListCreateView,
+    CargoDetailView,
+    CargoListCreateView,
     UserProfileView,
 )
 
@@ -23,8 +23,8 @@ urlpatterns = [
     path('token/refresh/', token_refresh_view, name='token_refresh'),
     path('me/', UserProfileView.as_view(), name='user_profile'),
     path('change-password/', ChangePasswordView.as_view(), name='change_password'),
-    path('roles/', RoleListCreateView.as_view(), name='role_list'),
-    path('roles/<int:pk>/', RoleDetailView.as_view(), name='role_detail'),
+    path('cargos/', CargoListCreateView.as_view(), name='cargo_list'),
+    path('cargos/<int:pk>/', CargoDetailView.as_view(), name='cargo_detail'),
     path('persons/', PersonListCreateView.as_view(), name='person_list'),
     path('persons/<int:pk>/', PersonDetailView.as_view(), name='person_detail'),
 ]

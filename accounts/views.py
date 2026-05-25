@@ -4,19 +4,20 @@ from rest_framework.views import APIView
 from drf_spectacular.utils import extend_schema, extend_schema_view
 from rest_framework_simplejwt.views import TokenObtainPairView
 
-from .models import Person, Role
+from .models import Person, Cargo
+from .permissions import IsManagementLevel
 from .serializers import (
     ChangePasswordSerializer,
     PersonSerializer,
     RegisterSerializer,
-    RoleSerializer,
+    CargoSerializer,
     UserSerializer,
 )
 
 @extend_schema(tags=['Registro y Perfil'])
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
-    permission_classes = [permissions.AllowAny]
+    permission_classes = [IsManagementLevel]
 
 
 @extend_schema(tags=['Autenticación'])
@@ -54,29 +55,29 @@ class ChangePasswordView(generics.UpdateAPIView):
         return Response({'detail': 'Contraseña actualizada correctamente.'}, status=status.HTTP_200_OK)
 
 
-@extend_schema(tags=['Gestión de Roles'])
-class RoleListCreateView(generics.ListCreateAPIView):
-    queryset = Role.objects.all()
-    serializer_class = RoleSerializer
-    permission_classes = [permissions.IsAdminUser]
+@extend_schema(tags=['Gestión de Cargos'])
+class CargoListCreateView(generics.ListCreateAPIView):
+    queryset = Cargo.objects.all()
+    serializer_class = CargoSerializer
+    permission_classes = [IsManagementLevel]
 
 
-@extend_schema(tags=['Gestión de Roles'])
-class RoleDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Role.objects.all()
-    serializer_class = RoleSerializer
-    permission_classes = [permissions.IsAdminUser]
+@extend_schema(tags=['Gestión de Cargos'])
+class CargoDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Cargo.objects.all()
+    serializer_class = CargoSerializer
+    permission_classes = [IsManagementLevel]
 
 
 @extend_schema(tags=['Gestión de Personas'])
 class PersonListCreateView(generics.ListCreateAPIView):
-    queryset = Person.objects.select_related('user', 'role').all()
+    queryset = Person.objects.select_related('user', 'cargo', 'departamento', 'superior').all()
     serializer_class = PersonSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsManagementLevel]
 
 
 @extend_schema(tags=['Gestión de Personas'])
 class PersonDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Person.objects.select_related('user', 'role').all()
+    queryset = Person.objects.select_related('user', 'cargo', 'departamento', 'superior').all()
     serializer_class = PersonSerializer
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [IsManagementLevel]
